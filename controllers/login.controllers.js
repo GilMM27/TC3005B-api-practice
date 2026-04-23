@@ -3,7 +3,7 @@ import User from "../models/users.model.js";
 export const login = async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
-    if (user.password === password) {
+    if (user && user.password === password) {
         res.status(200).json({
             login: true,
             msg: "ok",
