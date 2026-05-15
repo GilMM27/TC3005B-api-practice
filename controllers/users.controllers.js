@@ -1,4 +1,5 @@
 import User from "../models/users.model.js";
+import { getSalt, hash } from "../utils/hash.js";
 
 export const getUsers = async (req, res) => {
     const users = await User.find();
@@ -10,7 +11,9 @@ export const getUser = async (req, res) => {
 };
 export const postUser = async (req, res) => {
     const {name, username, password} = req.body;
-    const usar = new User({name, username, password});
+    const salt = getSalt();
+    const hashedPassword = hash(password, salt);
+    const usar = new User({name, username, password: salt + hashedPassword});
     const user = await usar.save();
     res.status(201).json(user);
 };
